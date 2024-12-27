@@ -13,6 +13,19 @@ const loggingMiddleware =(request,response,next)=>{
 
 //Globally declared middleware
 app.use(loggingMiddleware);
+
+const resolveIndexByUserId=(request,response,next)=>{
+  const {
+    params :{id},
+  } = request;
+  const parsedId=parseInt(id);
+  if(isNaN(parsedId)) return response.sendStatus(400);
+  const findUserIndex = mockUser.findIndex((user)=>user.id===parsedId);
+  if(findUserIndex===-1) return response.sendStatus(404);
+  request.findUserIndex=findUserIndex;
+  next();
+}
+
 //port environment variable
 const PORT = process.env.PORT || 3000;
 
@@ -61,16 +74,11 @@ app.get("/api/users/:id", (request, response) => {
   return response.send(findUser);
 });
 //PUT Request
-app.put("/api/users/:id",(request,response)=>{
+app.put("/api/users/:id",resolveIndexByUserId,(request,response)=>{
   const {
     body,
-    params :{id},
-  } = request;
-  const parsedId=parseInt(id);
-  if(isNaN(parsedId)) return response.sendStatus(400);
-  const findUserIndex = mockUser.findIndex((user)=>user.id===parsedId);
-  if(findUserIndex===-1) return response.sendStatus(404);
-  mockUser[findUserIndex]={id:parsedId,...body};
+    findUserIndex  } = request;
+  mockUser[findUserIndex]={id:mockUser[findUserIndex].id,...body};
   return response.sendStatus(200);
 })
 
