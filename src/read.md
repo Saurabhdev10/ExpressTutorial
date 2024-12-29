@@ -8,3 +8,4 @@ To install the dependencies, run the following command:
 npm install express
 npm install express-validator
 
+npm install cookie-parser

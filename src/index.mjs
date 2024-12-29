@@ -1,8 +1,6 @@
 import express, { response } from "express";
-import { query, validationResult, body,matchedData ,checkSchema} from "express-validator";
-import {createUserValidationSchema} from "./utils/validationSchemas.mjs";
-import { mockUser } from "./utils/constants.mjs";
-import routes from '../src/routes/index.mjs'
+import routes from '../src/routes/index.mjs';
+import cookieParser from "cookie-parser";
 
 const app = express();
 const loggingMiddleware = (request, response, next) => {
@@ -13,6 +11,7 @@ const loggingMiddleware = (request, response, next) => {
 };
 app.use(loggingMiddleware);
 app.use(express.json());
+app.use(cookieParser("secretKey"));
 app.use(routes);
 
 
@@ -25,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 
 app.get("/", (request, response) => {
+  response.cookie("hello","world",{maxAge:100000 ,signed:true});
   response.status(201).send({ msg: "hello" });
 });
 

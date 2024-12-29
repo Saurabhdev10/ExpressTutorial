@@ -5,7 +5,13 @@ import { mockProduct } from "../utils/constants.mjs";
 const router =Router();
 
 router.get("/api/products", (request, response) => {
-  response.send(mockProduct);
+  console.log(request.headers.cookie);
+  console.log("Cookies:",request.cookies);
+  console.log("Signed Cookies:",request.signedCookies.hello);
+  if(request.signedCookies.hello&&request.signedCookies.hello==="world"){
+    return response.send(mockProduct);
+  }
+  response.status(403).send({msg:"Invalid Cookie"});
 });
 
 
