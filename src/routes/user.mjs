@@ -17,6 +17,15 @@ router.get(
       "filter should be string and length should be between 3 to 10"
     ),
   (request, response) => {
+    console.log("request", request.session);
+    console.log("request", request.session.id);
+    request.sessionStore.get(request.session.id,(err,sessionData)=>{
+      if(err){
+        console.log(err);
+        throw err;
+      }
+      console.log(sessionData);
+    })
     const result = validationResult(request);
     console.log("result", result);
     //console.log("get users", request["express-validator#contexts"]);

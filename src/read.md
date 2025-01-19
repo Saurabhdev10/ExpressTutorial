@@ -9,3 +9,5 @@ npm install express
 npm install express-validator
 
 npm install cookie-parser
+
+npm install express-session
